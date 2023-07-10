@@ -1,4 +1,5 @@
 import {RecordStatusService} from "./record-status.service";
-import {RecordStatusInMemoryArrayAdapter} from "./adapters/record-status-in-memory-array.adapter";
+import {RecordStatusInMemoryArrayWriterAdapter} from "./adapters/record-status-in-memory-array-writer.adapter";
+import {RecordStatusInMemoryArrayReaderAdapter} from "./adapters/record-status-in-memory-array-reader.adapter";
 
-export default RecordStatusService(RecordStatusInMemoryArrayAdapter());
+export default RecordStatusService(RecordStatusInMemoryArrayWriterAdapter(), RecordStatusInMemoryArrayReaderAdapter());

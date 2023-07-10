@@ -3,9 +3,8 @@ import type {RecordStatusEntity} from "../core/entities/record-status.entity";
 import type {RequestRecordStatusDTO} from "../core/dtos/request-record-status.dto";
 import DataProvider from "../../../engines/data-provider";
 
-export function RecordStatusInMemoryArrayAdapter(): RecordStatusServiceWriterDrivenPorts {
+export function RecordStatusInMemoryArrayWriterAdapter(): RecordStatusServiceWriterDrivenPorts {
 
-    let counter = 0;
     const engine = DataProvider;
 
     async function save(dto: RequestRecordStatusDTO): Promise<RecordStatusEntity | null> {
@@ -42,7 +41,7 @@ export function RecordStatusInMemoryArrayAdapter(): RecordStatusServiceWriterDri
         const totalRecordStatuses = engine.length;
 
         const entity: RecordStatusEntity = {
-            id: counter++,
+            id: (totalRecordStatuses + 1),
             title: dto.title,
             status: dto.status
         }

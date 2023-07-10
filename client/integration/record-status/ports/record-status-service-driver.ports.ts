@@ -6,4 +6,6 @@ export interface RecordStatusServiceDriverPorts {
     addRecordStatus(dto: RequestRecordStatusAddDTO): Promise<RecordStatusDTO | null>;
     removeRecordStatus(id: number): Promise<RecordStatusDTO | null>;
     updateRecordStatus(dto: RequestRecordStatusUpdateDTO): Promise<RecordStatusDTO | null>;
+    getAllRecordStatus():Promise<RecordStatusDTO[] | null>;
+    getRecordStatusById(id: number): Promise<RecordStatusDTO | null>;
 }

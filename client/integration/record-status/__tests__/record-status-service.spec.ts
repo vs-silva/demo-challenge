@@ -1,4 +1,4 @@
-import {describe, expect, it, vi} from "vitest";
+import {describe, expect, it, vi, beforeEach} from "vitest";
 import {faker} from "@faker-js/faker";
 import {RecordStatusConstants} from "../core/constants/record-status.constants";
 import RecordStatus from "../index";
@@ -166,5 +166,100 @@ describe('RecordStatus service tests', () => {
 
     });
 
+    describe('getAllRecordStatus port tests', () => {
+
+        beforeEach(async  () => {
+            const result = await RecordStatus.getAllRecordStatus();
+
+            if(!result) {
+                return;
+            }
+
+            for (const recordStatusDTO of result) {
+                await RecordStatus.removeRecordStatus(recordStatusDTO.id);
+            }
+        });
+
+        it('getAllRecordStatus it should return a collection of RecordStatusDTOs', async () => {
+
+            const fakeRecordDTO: RequestRecordStatusAddDTO = {
+                title: faker.word.words(10),
+                status: RecordStatusConstants.DRAFT
+            };
+
+            await RecordStatus.addRecordStatus(fakeRecordDTO);
+
+            const spy = vi.spyOn(RecordStatus, 'getAllRecordStatus');
+            const result = await RecordStatus.getAllRecordStatus();
+
+            expect(spy).toHaveBeenCalledOnce();
+            expect(spy).toHaveBeenCalledWith();
+
+            expect(result).toBeTruthy();
+
+            expect(result).toStrictEqual(expect.arrayContaining(<RecordStatusDTO[]>[expect.objectContaining(<RecordStatusDTO>{
+                id: expect.any(Number),
+                title: expect.any(String),
+                status: expect.stringMatching(statusRegex)
+            })]));
+
+        });
+
+        it('getAllRecordStatus it should return null if no item exist in the data provider', async () => {
+
+            const spy = vi.spyOn(RecordStatus, 'getAllRecordStatus');
+            const result = await RecordStatus.getAllRecordStatus();
+
+            expect(spy).toHaveBeenCalledOnce();
+            expect(spy).toHaveBeenCalledWith();
+
+            expect(result).toBeNull();
+
+        });
+
+    });
+
+    describe('getRecordStatusById port tests', () => {
+
+        it('getRecordStatusById it should take a RecordStatus id and return a RecordStatusDTO', async () => {
+
+            const fakeRecordDTO: RequestRecordStatusAddDTO = {
+                title: faker.word.words(10),
+                status: RecordStatusConstants.DRAFT
+            };
+
+            const createdRecordStatus = await RecordStatus.addRecordStatus(fakeRecordDTO);
+
+            const spy = vi.spyOn(RecordStatus, 'getRecordStatusById');
+            const result = await RecordStatus.getRecordStatusById(createdRecordStatus?.id as number);
+
+            expect(spy).toHaveBeenCalledOnce();
+            expect(spy).toHaveBeenCalledWith(createdRecordStatus?.id as number);
+
+            expect(result).toBeTruthy();
+
+            expect(result).toStrictEqual(expect.objectContaining(<RecordStatusDTO>{
+                id: expect.any(Number),
+                title: expect.any(String),
+                status: expect.stringMatching(statusRegex)
+            }));
+
+        });
+
+        it('getRecordStatusById it should return null if no item exist in the data provider with the provided fake id', async () => {
+
+            const fakeId = faker.number.int({min: 999, max: 9999});
+
+            const spy = vi.spyOn(RecordStatus, 'getRecordStatusById');
+            const result = await RecordStatus.getRecordStatusById(fakeId);
+
+            expect(spy).toHaveBeenCalledOnce();
+            expect(spy).toHaveBeenCalledWith(fakeId);
+
+            expect(result).toBeNull();
+
+        });
+
+    });
 
 });
