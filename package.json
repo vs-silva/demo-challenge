@@ -6,7 +6,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest --environment jsdom",
+    "test:cov": "vitest run --environment jsdom --coverage"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
