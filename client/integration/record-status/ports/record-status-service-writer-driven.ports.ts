@@ -1,7 +1,7 @@
-import type {RequestRecordStatusAddDTO} from "../core/dtos/request-record-status-add.dto";
 import type {RecordStatusEntity} from "../core/entities/record-status.entity";
+import type {RequestRecordStatusDTO} from "../core/dtos/request-record-status.dto";
 
 export interface RecordStatusServiceWriterDrivenPorts {
-    save(dto: RequestRecordStatusAddDTO): Promise<RecordStatusEntity | null>;
+    save(dto: RequestRecordStatusDTO): Promise<RecordStatusEntity | null>;
     remove(id: number): Promise<RecordStatusEntity | null>;
 }

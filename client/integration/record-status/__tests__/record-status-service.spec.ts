@@ -4,6 +4,7 @@ import {RecordStatusConstants} from "../core/constants/record-status.constants";
 import RecordStatus from "../index";
 import type {RequestRecordStatusAddDTO} from "../core/dtos/request-record-status-add.dto";
 import type {RecordStatusDTO} from "../core/dtos/record-status.dto";
+import type {RequestRecordStatusUpdateDTO} from "../core/dtos/request-record-status-update.dto";
 
 describe('RecordStatus service tests', () => {
 
@@ -92,6 +93,75 @@ describe('RecordStatus service tests', () => {
 
             expect(result).toBeNull();
 
+        });
+
+    });
+
+    describe('updateRecordStatus port tests', () => {
+
+        it('updateRecordStatus should take a RequestRecordStatusUpdateDTO update an existent RecordStatus on the DataProvider and return RecordStatusDTO', async () => {
+
+            const fakeRecordDTO: RequestRecordStatusAddDTO = {
+                title: faker.word.words(10),
+                status: RecordStatusConstants.DRAFT
+            };
+
+            const createdRecordStatus = await RecordStatus.addRecordStatus(fakeRecordDTO);
+
+            expect(createdRecordStatus).toBeTruthy();
+
+            const fakeUpdateRecordStatusDTO: RequestRecordStatusUpdateDTO = {
+                id: createdRecordStatus?.id as number,
+                title: faker.word.words(5),
+                status: RecordStatusConstants.PUBLISHED
+            };
+
+            const spy = vi.spyOn(RecordStatus, 'updateRecordStatus');
+            const result = await RecordStatus.updateRecordStatus(fakeUpdateRecordStatusDTO);
+
+            expect(spy).toHaveBeenCalledOnce();
+            expect(spy).toHaveBeenCalledWith(fakeUpdateRecordStatusDTO);
+
+            expect(result).toStrictEqual(expect.objectContaining(<RecordStatusDTO>{
+                id: expect.any(Number),
+                title: expect.any(String),
+                status: expect.stringMatching(statusRegex)
+            }));
+
+        });
+
+        it('updateRecordStatus should return null if required RequestRecordStatusUpdateDTO fields are not provided', async () => {
+
+            const fakeUpdateRecordStatusDTO: RequestRecordStatusUpdateDTO = {
+                id: 1,
+                title: faker.word.words(5),
+                status: ' '
+            };
+
+            const spy = vi.spyOn(RecordStatus, 'updateRecordStatus');
+            const result = await RecordStatus.updateRecordStatus(fakeUpdateRecordStatusDTO);
+
+            expect(spy).toHaveBeenCalledOnce();
+            expect(spy).toHaveBeenCalledWith(fakeUpdateRecordStatusDTO);
+
+            expect(result).toBeNull();
+        });
+
+        it('updateRecordStatus should return null if non existent RecordStatus id is provided in the RequestRecordStatusUpdateDTO', async () => {
+
+            const fakeUpdateRecordStatusDTO: RequestRecordStatusUpdateDTO = {
+                id: faker.number.int({min: 999, max: 9999}),
+                title: faker.word.words(5),
+                status: RecordStatusConstants.PUBLISHED
+            };
+
+            const spy = vi.spyOn(RecordStatus, 'updateRecordStatus');
+            const result = await RecordStatus.updateRecordStatus(fakeUpdateRecordStatusDTO);
+
+            expect(spy).toHaveBeenCalledOnce();
+            expect(spy).toHaveBeenCalledWith(fakeUpdateRecordStatusDTO);
+
+            expect(result).toBeNull();
         });
 
     });
