@@ -7,6 +7,10 @@ export function RecordStatusService(writer: RecordStatusServiceWriterDrivenPorts
 
     async function addRecordStatus(dto: RequestRecordStatusAddDTO): Promise<RecordStatusDTO | null> {
 
+        if(!dto.title.trim() || !dto.status.trim()) {
+            return null;
+        }
+
         const entity = await writer.save(dto);
 
         if(!entity) {
@@ -20,8 +24,29 @@ export function RecordStatusService(writer: RecordStatusServiceWriterDrivenPorts
         };
     }
 
+    async function removeRecordStatus(id: number): Promise<RecordStatusDTO | null> {
+
+        if(!id.toString().trim() || !(id > 0)) {
+            return null;
+        }
+
+        const entity = await writer.remove(id);
+
+        if(!entity) {
+            return null;
+        }
+
+        return <RecordStatusDTO> {
+            id: entity.id,
+            status: entity.status,
+            title: entity.title
+        };
+
+    }
+
 
     return {
-      addRecordStatus
+      addRecordStatus,
+      removeRecordStatus
     };
 }

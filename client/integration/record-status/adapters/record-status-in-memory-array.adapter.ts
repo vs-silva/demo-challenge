@@ -12,23 +12,44 @@ export function RecordStatusInMemoryArrayAdapter(): RecordStatusServiceWriterDri
 
         const totalRecordStatuses = engine.length;
 
-        const recordStatusEntity: RecordStatusEntity = {
+        const entity: RecordStatusEntity = {
             id: counter++,
             title: dto.title,
             status: dto.status
         }
 
-        engine.push(recordStatusEntity);
+        engine.push(entity);
 
         if(engine.length === totalRecordStatuses) {
             return null;
         }
 
-        return recordStatusEntity;
+        return entity;
 
     }
 
+    async function remove(id: number): Promise<RecordStatusEntity | null> {
+
+        const totalRecordStatuses = engine.length;
+
+        const entity = engine.find(entity => entity.id === id);
+
+        if(!entity) {
+            return null;
+        }
+
+        const index = engine.findIndex(entity => entity.id === id);
+        engine.splice(index,1);
+
+        if(engine.length === totalRecordStatuses) {
+            return null;
+        }
+
+        return entity;
+    }
+
     return {
-        save
+        save,
+        remove
     };
 }
