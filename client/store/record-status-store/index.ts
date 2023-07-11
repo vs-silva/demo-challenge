@@ -3,7 +3,7 @@ import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/re
 import type {RequestRecordStatusAddDTO} from "../../integration/record-status/core/dtos/request-record-status-add.dto";
 import type {RequestRecordStatusUpdateDTO} from "../../integration/record-status/core/dtos/request-record-status-update.dto";
 import {RequestRecordStatusAddUpdateDtoValidationSchema} from "./schema-validation/request-record-status-add-update-dto-validation.schema";
-import {RequestRecordStatusRemoveValidationSchema} from "./schema-validation/request-record-status-remove-validation.schema";
+import {RequestRecordStatusIdValidationSchema} from "./schema-validation/request-record-status-id-validation.schema";
 import RecordStatus from "../../integration/record-status";
 
 export const RecordStatusStoreIdentifier = 'record-status-store';
@@ -11,6 +11,8 @@ export const RecordStatusStoreIdentifier = 'record-status-store';
 export function RecordStatusStore() {
 
     const recordStatusCollection = ref<RecordStatusDTO[] | null>(null);
+    const recordStatus = ref<RecordStatusDTO | null>(null);
+    const recordStatusEdit = ref<RecordStatusDTO | null>(null);
     const validationErrorMessage = ref<string | null>(null);
     const recordStatusAdded = ref<boolean>(false);
     const recordStatusRemoved = ref<boolean>(false);
@@ -22,8 +24,7 @@ export function RecordStatusStore() {
             validationErrorMessage.value = null;
             return await RequestRecordStatusAddUpdateDtoValidationSchema.validateAsync(dto) as RequestRecordStatusAddDTO | RequestRecordStatusUpdateDTO;
         } catch (error) {
-            const {message} = (error as {details: object[], message: string});
-            validationErrorMessage.value = message;
+            handleValidationError(error as {details: object[], message: string});
             return null;
         }
     }
@@ -53,7 +54,7 @@ export function RecordStatusStore() {
         try {
             recordStatusRemoved.value = false;
 
-            await RequestRecordStatusRemoveValidationSchema.validateAsync(id);
+            await RequestRecordStatusIdValidationSchema.validateAsync(id);
 
             const recordStatusDTO = await RecordStatus.removeRecordStatus(id);
 
@@ -66,10 +67,7 @@ export function RecordStatusStore() {
             recordStatusCollection.value = await RecordStatus.getAllRecordStatus();
 
         } catch (error) {
-            const {message} = (error as {details: object[], message: string});
-            validationErrorMessage.value = message;
-            return;
-
+            handleValidationError(error as {details: object[], message: string});
         }
 
     }
@@ -98,9 +96,32 @@ export function RecordStatusStore() {
         recordStatusCollection.value = await RecordStatus.getAllRecordStatus();
     }
 
+    async function getRecordStatusById(id: number):Promise<void> {
+
+        try {
+            await RequestRecordStatusIdValidationSchema.validateAsync(id);
+            recordStatus.value = await RecordStatus.getRecordStatusById(id);
+        } catch (error) {
+            recordStatus.value = null;
+            handleValidationError(error as {details: object[], message: string});
+        }
+
+    }
+
+    function handleValidationError(error: {details: object[], message: string}): void {
+        const {message} = error;
+        validationErrorMessage.value = message;
+        return;
+    }
+
+    function enableRecordStatusEdit(dto: RecordStatusDTO): void {
+        recordStatusEdit.value = dto;
+    }
 
     return {
         recordStatusCollection,
+        recordStatus,
+        recordStatusEdit,
         validationErrorMessage,
         recordStatusAdded,
         recordStatusUpdated,
@@ -108,6 +129,8 @@ export function RecordStatusStore() {
         addRecordStatus,
         removeRecordStatus,
         updateRecordStatus,
-        getAllRecordStatus
+        getAllRecordStatus,
+        getRecordStatusById,
+        enableRecordStatusEdit
     };
 }

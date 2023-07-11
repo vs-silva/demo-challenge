@@ -318,5 +318,99 @@ describe('RecordStatusStore tests', () => {
     });
 
 
+    describe('getRecordStatusById tests', () => {
+
+        const { recordStatus } = storeToRefs(recordStatusStore);
+        const { addRecordStatus, removeRecordStatus, getRecordStatusById } = recordStatusStore;
+
+        beforeEach(async () => {
+            const recordStatusDTOCollection = recordStatusCollection.value;
+
+            if(!recordStatusDTOCollection) {
+                return;
+            }
+
+            for (const recordStatusDTO of recordStatusDTOCollection) {
+                await removeRecordStatus(recordStatusDTO.id);
+            }
+        });
+
+        it('RecordStatusStore should contain a updateRecordStatus method', () => {
+
+            expect(getRecordStatusById).not.toBeNull();
+            expect(getRecordStatusById).toBeDefined();
+            expect(getRecordStatusById).toBeInstanceOf(Function);
+
+        });
+
+        it('updateRecordStatus should return RecordStatus with the provided id', async () => {
+
+            expect(recordStatusCollection.value).toBeNull();
+            expect(recordStatus.value).toBeNull();
+
+            const fakeAddDTO = <RequestRecordStatusAddDTO>{
+                title: faker.word.sample(5),
+                status: RecordStatusConstants.PUBLISHED
+            };
+
+            await addRecordStatus(fakeAddDTO);
+            const recordStatusDTO = (recordStatusCollection.value as RecordStatusDTO[])[0];
+
+            const spy = vi.fn(getRecordStatusById);
+            await spy(recordStatusDTO.id);
+
+            expect(spy).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalledWith(recordStatusDTO.id);
+
+            expect(recordStatus.value).not.toBeNull();
+
+        });
+
+        it('updateRecordStatus should return not RecordStatus if provided id does not exist on data provider', async () => {
+
+            const fakeId = faker.number.int({min:999, max: 9999});
+            await getRecordStatusById(fakeId);
+            expect(recordStatus.value).toBeNull();
+
+        });
+
+    });
+
+    describe('enableRecordStatusEdit tests', () => {
+
+        const { recordStatusEdit } = storeToRefs(recordStatusStore);
+        const { enableRecordStatusEdit } = recordStatusStore;
+
+        it('RecordStatusStore should contain a enableRecordStatusEdit method', () => {
+
+            expect(enableRecordStatusEdit).not.toBeNull();
+            expect(enableRecordStatusEdit).toBeDefined();
+            expect(enableRecordStatusEdit).toBeInstanceOf(Function);
+
+        });
+
+
+        it('enableRecordStatusEdit should setup recordStatusEdit with a copy of the RecordStatus that is about to be edited', () => {
+
+            expect(recordStatusEdit.value).toBeNull();
+
+            const fakeRecordStatusDTO: RecordStatusDTO = {
+                id: faker.number.int({min:1}),
+                title: faker.word.sample(4),
+                status: RecordStatusConstants.DRAFT
+            };
+
+            const spy = vi.fn(enableRecordStatusEdit);
+            spy(fakeRecordStatusDTO);
+
+            expect(spy).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalledWith(fakeRecordStatusDTO);
+
+            expect(recordStatusEdit.value).not.toBeNull();
+
+        });
+
+
+    });
 
 });
