@@ -1,7 +1,7 @@
 import {afterAll, beforeAll, describe, expect, it} from "vitest";
 import {cleanup, render, RenderResult} from "@testing-library/vue";
 import {faker} from "@faker-js/faker";
-import RecordStatusTableComponent from "../record-status-table.component.vue"
+import RecordStatusTableComponent from "../index.vue"
 
 describe('RecordStatusTableComponent tests', () => {
 
@@ -11,7 +11,10 @@ describe('RecordStatusTableComponent tests', () => {
         component = render(RecordStatusTableComponent);
     });
 
-    it('RecordStatusTableComponent should contain a table', () => {
+    it('RecordStatusTableComponent should contain a table container', () => {
+
+        const tableContainer = component.getByTestId('record-status-table-component-container');
+        expect(tableContainer).not.toBeUndefined();
 
         component.debug();
 

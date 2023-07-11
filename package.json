@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@invictus.codes/nuxt-vuetify": "^0.3.0",
     "@nuxt/devtools": "latest",
     "@pinia/nuxt": "^0.4.11",
     "@pinia/testing": "^0.1.2",
