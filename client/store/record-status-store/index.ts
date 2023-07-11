@@ -66,10 +66,8 @@ export function RecordStatusStore() {
             recordStatusCollection.value = await RecordStatus.getAllRecordStatus();
 
         } catch (error) {
-
             const {message} = (error as {details: object[], message: string});
             validationErrorMessage.value = message;
-            console.log(message);
             return;
 
         }
