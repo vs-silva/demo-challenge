@@ -240,7 +240,7 @@ describe('RecordStatusStore tests', () => {
             const fakeUpdateDTO = <RequestRecordStatusUpdateDTO>{
                 id: recordStatusDTO.id,
                 title: faker.word.sample(2),
-                status: RecordStatusConstants.DRAFT
+                status: faker.word.sample()
             };
 
             const spy = vi.fn(updateRecordStatus);
@@ -253,10 +253,11 @@ describe('RecordStatusStore tests', () => {
             expect(recordStatusUpdated.value).toEqual(false);
             expect(validationErrorMessage.value).toBeTruthy();
 
-            const updatedRecordStatusDTO = (recordStatusCollection.value as RecordStatusDTO[])[0] as RecordStatusDTO;
-
-            expect(updatedRecordStatusDTO.title).toStrictEqual(fakeAddDTO.title);
-            expect(updatedRecordStatusDTO.status).toStrictEqual(fakeAddDTO.status);
+            expect(recordStatusDTO.id).toEqual(fakeUpdateDTO.id);
+            expect(recordStatusDTO.title).toEqual(fakeAddDTO.title);
+            expect(recordStatusDTO.title).not.toEqual(fakeUpdateDTO.title);
+            expect(recordStatusDTO.status).toEqual(fakeAddDTO.status);
+            expect(recordStatusDTO.status).not.toEqual(fakeUpdateDTO.status);
 
             expect(recordStatusUpdated.value).toEqual(false);
 
