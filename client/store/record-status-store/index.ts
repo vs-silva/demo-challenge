@@ -27,7 +27,6 @@ export function RecordStatusStore() {
         }
     }
 
-
     async function addRecordStatus(dto: RequestRecordStatusAddDTO): Promise<void> {
 
         recordStatusCollection.value = null;

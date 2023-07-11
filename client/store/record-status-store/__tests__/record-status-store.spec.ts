@@ -11,14 +11,13 @@ describe('RecordStatusStore tests', () => {
 
     setActivePinia(createPinia());
     const recordStatusStore = Store.useRecordStatusStore();
-    const { recordStatusCollection } = storeToRefs(recordStatusStore);
+    const { recordStatusCollection, validationErrorMessage } = storeToRefs(recordStatusStore);
 
     const statusRegex = /^(draft|published|pending)$/i;
 
     describe('validateRecordStatus tests', () => {
 
         const { validateRecordStatus } = recordStatusStore;
-        const { validationErrorMessage } = storeToRefs(recordStatusStore);
 
         const fakeDTO = <RequestRecordStatusAddDTO>{
             title: faker.word.sample(10),
@@ -46,7 +45,7 @@ describe('RecordStatusStore tests', () => {
             expect(result?.title).toEqual(fakeDTO.title);
             expect(result?.status).toEqual(fakeDTO.status);
 
-            expect(validationErrorMessage.value).toBeNull()
+            expect(validationErrorMessage.value).toBeNull();
 
             expect(result).toStrictEqual(expect.objectContaining(<RequestRecordStatusAddDTO>{
                 title: expect.any(String),
@@ -120,6 +119,7 @@ describe('RecordStatusStore tests', () => {
 
         const { addRecordStatus, removeRecordStatus } = recordStatusStore;
 
+
         it('removeRecordStatus should remove a RecordStatus', async () => {
 
             const initialCollectionAmount = recordStatusCollection.value?.length as number | 0;
@@ -144,8 +144,24 @@ describe('RecordStatusStore tests', () => {
             expect(spy).toHaveBeenCalled();
             expect(spy).toHaveBeenCalledWith(recordStatusDTO.id);
 
+            expect(validationErrorMessage.value).toBeNull();
+
             const finalCollectionAmount = recordStatusCollection.value?.length as number | 0;
             expect(finalCollectionAmount).toEqual(initialCollectionAmount);
+
+        });
+
+        it('removeRecordStatus should return if invalid id is provided', async () => {
+
+            const fakeId = -faker.number.int();
+
+            const spy = vi.fn(removeRecordStatus);
+            await spy(fakeId);
+
+            expect(validationErrorMessage.value).not.toBeNull();
+
+            expect(spy).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalledWith(fakeId);
 
         });
 
