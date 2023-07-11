@@ -265,6 +265,57 @@ describe('RecordStatusStore tests', () => {
     });
 
 
+    describe('getAllRecordStatus tests', () => {
+
+        const { addRecordStatus, removeRecordStatus, getAllRecordStatus } = recordStatusStore;
+
+        beforeEach(async () => {
+
+            const recordStatusDTOCollection = recordStatusCollection.value;
+
+            if(!recordStatusDTOCollection) {
+                return;
+            }
+
+            for (const recordStatusDTO of recordStatusDTOCollection) {
+                await removeRecordStatus(recordStatusDTO.id);
+            }
+        });
+
+        it('RecordStatusStore should contain a updateRecordStatus method', () => {
+
+            expect(getAllRecordStatus).not.toBeNull();
+            expect(getAllRecordStatus).toBeDefined();
+            expect(getAllRecordStatus).toBeInstanceOf(Function);
+
+        });
+
+        it('getAllRecordStatus should return null if no data exists in the DataProvider', async () => {
+            await getAllRecordStatus();
+            expect(recordStatusCollection.value).toBeNull();
+        });
+
+        it('getAllRecordStatus should return a RecordStatusDTOCollection if data exists in the DataProvider', async () => {
+
+            const fakeAddDTO = <RequestRecordStatusAddDTO>{
+                title: faker.word.sample(5),
+                status: RecordStatusConstants.PUBLISHED
+            };
+
+            await addRecordStatus(fakeAddDTO);
+
+            await getAllRecordStatus();
+            expect(recordStatusCollection.value).not.toBeNull();
+
+            expect(recordStatusCollection.value).toStrictEqual(expect.objectContaining(<RecordStatusDTO[]>[expect.objectContaining(<RecordStatusDTO>{
+                id: expect.any(Number),
+                title: expect.any(String),
+                status: expect.stringMatching(statusRegex)
+            })]));
+
+        });
+
+    });
 
 
 

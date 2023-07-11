@@ -94,6 +94,10 @@ export function RecordStatusStore() {
         recordStatusCollection.value = await RecordStatus.getAllRecordStatus();
     }
 
+    async function getAllRecordStatus(): Promise<void> {
+        recordStatusCollection.value = await RecordStatus.getAllRecordStatus();
+    }
+
 
     return {
         recordStatusCollection,
@@ -103,6 +107,7 @@ export function RecordStatusStore() {
         validateRecordStatus,
         addRecordStatus,
         removeRecordStatus,
-        updateRecordStatus
+        updateRecordStatus,
+        getAllRecordStatus
     };
 }
