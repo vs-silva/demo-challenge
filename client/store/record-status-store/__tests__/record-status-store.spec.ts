@@ -1,11 +1,12 @@
-import {describe, it, expect, vi} from "vitest";
+import {describe, it, expect, vi, beforeEach} from "vitest";
 import {faker} from "@faker-js/faker";
 import {createPinia, setActivePinia} from "pinia";
 import Store from "../../index";
 import {storeToRefs} from "pinia";
 import {RecordStatusConstants} from "../../../integration/record-status/core/constants/record-status.constants";
 import type {RequestRecordStatusAddDTO} from "../../../integration/record-status/core/dtos/request-record-status-add.dto";
-import {RecordStatusDTO} from "~/client/integration/record-status/core/dtos/record-status.dto";
+import type {RecordStatusDTO} from "../../../integration/record-status/core/dtos/record-status.dto";
+import type {RequestRecordStatusUpdateDTO} from "../../../integration/record-status/core/dtos/request-record-status-update.dto";
 
 describe('RecordStatusStore tests', () => {
 
@@ -78,7 +79,7 @@ describe('RecordStatusStore tests', () => {
 
         const { recordStatusAdded } = storeToRefs(recordStatusStore);
 
-        it('addRecordStatus should contain a validateRecordStatus method', () => {
+        it('RecordStatusStore should contain a addRecordStatus method', () => {
 
             const { addRecordStatus } = recordStatusStore;
 
@@ -118,6 +119,14 @@ describe('RecordStatusStore tests', () => {
     describe('removeRecordStatus tests', () => {
 
         const { addRecordStatus, removeRecordStatus } = recordStatusStore;
+
+        it('RecordStatusStore should contain a removeRecordStatus method', () => {
+
+            expect(removeRecordStatus).not.toBeNull();
+            expect(removeRecordStatus).toBeDefined();
+            expect(removeRecordStatus).toBeInstanceOf(Function);
+
+        });
 
 
         it('removeRecordStatus should remove a RecordStatus', async () => {
@@ -162,6 +171,94 @@ describe('RecordStatusStore tests', () => {
 
             expect(spy).toHaveBeenCalled();
             expect(spy).toHaveBeenCalledWith(fakeId);
+
+        });
+
+    });
+
+    describe('updateRecordStatus tests', () => {
+
+        const { recordStatusUpdated } = storeToRefs(recordStatusStore);
+        const { addRecordStatus, updateRecordStatus, removeRecordStatus } = recordStatusStore;
+
+        beforeEach(async () => {
+
+            const recordStatusDTOCollection = recordStatusCollection.value;
+
+            if(!recordStatusDTOCollection) {
+               return;
+            }
+
+            for (const recordStatusDTO of recordStatusDTOCollection) {
+                await removeRecordStatus(recordStatusDTO.id);
+            }
+        });
+
+        it('RecordStatusStore should contain a updateRecordStatus method', () => {
+
+            expect(updateRecordStatus).not.toBeNull();
+            expect(updateRecordStatus).toBeDefined();
+            expect(updateRecordStatus).toBeInstanceOf(Function);
+
+        });
+
+        it('updateRecordStatus should update a RecordStatus', async () => {
+
+            const fakeAddDTO = <RequestRecordStatusAddDTO>{
+                title: faker.word.sample(4),
+                status: RecordStatusConstants.PUBLISHED
+            };
+
+            await addRecordStatus(fakeAddDTO);
+            const recordStatusDTO = (recordStatusCollection.value as RecordStatusDTO[])[0];
+            recordStatusDTO.status = RecordStatusConstants.DRAFT;
+
+            const spy = vi.fn(updateRecordStatus);
+            await spy(recordStatusDTO);
+
+            expect(spy).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalledWith(recordStatusDTO);
+
+            const updatedRecordStatusDTO = (recordStatusCollection.value as RecordStatusDTO[])[0];
+            expect(updatedRecordStatusDTO.status).toEqual(RecordStatusConstants.DRAFT);
+
+            expect(recordStatusUpdated.value).toEqual(true);
+
+        });
+
+        it('updateRecordStatus should not update RecordStatus if validation fails', async () => {
+
+            const fakeAddDTO = <RequestRecordStatusAddDTO>{
+                title: faker.word.sample(5),
+                status: RecordStatusConstants.PUBLISHED
+            };
+
+            await addRecordStatus(fakeAddDTO);
+
+            const recordStatusDTO = (recordStatusCollection.value as RecordStatusDTO[])[0];
+
+            const fakeUpdateDTO = <RequestRecordStatusUpdateDTO>{
+                id: recordStatusDTO.id,
+                title: faker.word.sample(2),
+                status: RecordStatusConstants.DRAFT
+            };
+
+            const spy = vi.fn(updateRecordStatus);
+            await spy(fakeUpdateDTO);
+
+            expect(spy).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalledWith(fakeUpdateDTO);
+            expect(spy).toReturn();
+
+            expect(recordStatusUpdated.value).toEqual(false);
+            expect(validationErrorMessage.value).toBeTruthy();
+
+            const updatedRecordStatusDTO = (recordStatusCollection.value as RecordStatusDTO[])[0] as RecordStatusDTO;
+
+            expect(updatedRecordStatusDTO.title).toStrictEqual(fakeAddDTO.title);
+            expect(updatedRecordStatusDTO.status).toStrictEqual(fakeAddDTO.status);
+
+            expect(recordStatusUpdated.value).toEqual(false);
 
         });
 

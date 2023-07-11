@@ -14,6 +14,7 @@ export function RecordStatusStore() {
     const validationErrorMessage = ref<string | null>(null);
     const recordStatusAdded = ref<boolean>(false);
     const recordStatusRemoved = ref<boolean>(false);
+    const recordStatusUpdated = ref<boolean>(false);
 
     async function validateRecordStatus(dto: RequestRecordStatusAddDTO | RequestRecordStatusUpdateDTO): Promise<RequestRecordStatusAddDTO | RequestRecordStatusUpdateDTO | null> {
 
@@ -29,7 +30,6 @@ export function RecordStatusStore() {
 
     async function addRecordStatus(dto: RequestRecordStatusAddDTO): Promise<void> {
 
-        recordStatusCollection.value = null;
         recordStatusAdded.value = false;
         const validationResult = await validateRecordStatus(dto);
 
@@ -44,13 +44,13 @@ export function RecordStatusStore() {
         }
 
         recordStatusAdded.value = true;
+        recordStatusCollection.value = null;
         recordStatusCollection.value = await RecordStatus.getAllRecordStatus();
     }
 
     async function removeRecordStatus(id: number): Promise<void> {
 
         try {
-            recordStatusCollection.value = null;
             recordStatusRemoved.value = false;
 
             await RequestRecordStatusRemoveValidationSchema.validateAsync(id);
@@ -62,6 +62,7 @@ export function RecordStatusStore() {
             }
 
             recordStatusRemoved.value = true;
+            recordStatusCollection.value = null;
             recordStatusCollection.value = await RecordStatus.getAllRecordStatus();
 
         } catch (error) {
@@ -73,13 +74,35 @@ export function RecordStatusStore() {
 
     }
 
+    async function updateRecordStatus(dto: RequestRecordStatusUpdateDTO): Promise<void> {
+
+        recordStatusUpdated.value = false;
+        const validationResult = await validateRecordStatus(dto);
+
+        if(!validationResult) {
+            return;
+        }
+
+        const recordStatusDTO = await RecordStatus.updateRecordStatus(dto);
+
+        if(!recordStatusDTO) {
+            return;
+        }
+
+        recordStatusUpdated.value = true;
+        recordStatusCollection.value = null;
+        recordStatusCollection.value = await RecordStatus.getAllRecordStatus();
+    }
+
 
     return {
         recordStatusCollection,
         validationErrorMessage,
         recordStatusAdded,
+        recordStatusUpdated,
         validateRecordStatus,
         addRecordStatus,
         removeRecordStatus,
+        updateRecordStatus
     };
 }
