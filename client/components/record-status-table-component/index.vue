@@ -1,5 +1,5 @@
 <template>
-  <div class="record-status-table-component-container" data-testid="record-status-table-component-container">
+  <div data-testid="record-status-table-component-container">
 
     <div class="pr-6 pl-6 pt-6" data-testid="record-status-table-component-table-header-container">
       <h4 class="d-inline-block text-h4" data-testid="record-status-table-component-table-header-title">Table Title</h4>
