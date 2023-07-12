@@ -36,12 +36,18 @@ describe('RecordStatusTableComponent tests', () => {
     it('RecordStatusTableComponent should contain a table container', () => {
 
         const tableContainer = component.getByTestId('record-status-table-component-container');
+        const tableHeaderContainer = component.getByTestId('record-status-table-component-table-header-container');
+        const tableHeaderTitle = component.getByTestId('record-status-table-component-table-header-title');
+        const tableHeaderToggle = component.getByTestId('record-status-table-component-table-header-toggle');
         const table = component.getByTestId('record-status-table-component-table');
         const tableHead = component.getByTestId('record-status-table-component-head');
         const tableHeadRow = component.getByTestId('record-status-table-component-head-row');
         const tableBody = component.getByTestId('record-status-table-component-body');
 
         expect(tableContainer).toBeDefined();
+        expect(tableHeaderContainer).toBeDefined();
+        expect(tableHeaderTitle).toBeDefined();
+        expect(tableHeaderToggle).toBeDefined();
         expect(table).toBeDefined();
         expect(tableHead).toBeDefined();
         expect(tableHeadRow).toBeDefined();
@@ -87,6 +93,17 @@ describe('RecordStatusTableComponent tests', () => {
 
     });
 
+    it('headerToggle should respond to a click event and emit', async () => {
+
+        const tableHeaderToggle = component.getByTestId('record-status-table-component-table-header-toggle');
+        expect(tableHeaderToggle).toBeDefined();
+
+        await fireEvent.click(tableHeaderToggle);
+
+        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.CREATE_ROW_CONTENT)).toBeTruthy();
+
+    });
+
     it('recordStatusTableContent should respond to a click event and emit the selected RecordStatusDTO to be edited', async () => {
 
         const editOptions = component.getAllByTestId('record-status-table-component-body-row-edit-option');
@@ -97,8 +114,8 @@ describe('RecordStatusTableComponent tests', () => {
 
         await fireEvent.click(firstEditOption);
 
-        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.EDIT_RECORD_STATUS)).toBeTruthy();
-        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.EDIT_RECORD_STATUS)).toEqual([[fakeRecordStatusDTOCollection[0]]]);
+        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.EDIT_ROW_CONTENT)).toBeTruthy();
+        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.EDIT_ROW_CONTENT)).toEqual([[fakeRecordStatusDTOCollection[0]]]);
 
     });
 
@@ -113,8 +130,8 @@ describe('RecordStatusTableComponent tests', () => {
 
         await fireEvent.click(firstDeleteOption);
 
-        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.DELETE_RECORD_STATUS)).toBeTruthy();
-        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.DELETE_RECORD_STATUS)).toEqual([[fakeRecordStatusDTOCollection[0]]]);
+        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.DELETE_ROW_CONTENT)).toBeTruthy();
+        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.DELETE_ROW_CONTENT)).toEqual([[fakeRecordStatusDTOCollection[0]]]);
 
     });
 

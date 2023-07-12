@@ -1,5 +1,5 @@
 export const RecordStatusTableComponentEventTypeConstants = {
-    EDIT_RECORD_STATUS: 'edit-record-status',
-    DELETE_RECORD_STATUS: 'delete-record-status',
-
+    CREATE_ROW_CONTENT: 'create-row-content',
+    EDIT_ROW_CONTENT: 'edit-row-content',
+    DELETE_ROW_CONTENT: 'delete-row-content'
 } as const;
