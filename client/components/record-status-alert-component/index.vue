@@ -4,7 +4,7 @@
     <v-snackbar
         v-if="props.alertType"
         v-model="props.display"
-        close-delay="3000"
+        timeout="300ms"
         :color="props.alertType.type"
     >
       <h1>{{alertType?.title}}</h1>
