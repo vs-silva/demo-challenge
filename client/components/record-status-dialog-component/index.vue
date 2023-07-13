@@ -22,7 +22,10 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-btn color="error" inline-block>Delete</v-btn>
+            <v-btn color="error"
+                   inline-block
+                   @click.prevent="() => emit(RecordStatusDialogComponentEventTypeConstants.DELETE_RECORD_STATUS, recordStatusDTO)"
+            >Delete</v-btn>
             <v-btn
                 color="blue-grey-lighten-1"
                 inline-block

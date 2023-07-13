@@ -1,7 +1,7 @@
 <template>
   <div data-testid="record-status-drawer-component-container">
     <v-layout>
-      <v-navigation-drawer v-model="props.display" location="right" temporary data-testid="record-status-drawer-component">
+      <v-navigation-drawer v-model="props.display" location="right" temporary data-testid="record-status-drawer-component" class="pa-4">
 
         <v-form data-testid="record-status-drawer-form" @submit.prevent="async (event) => {
 
