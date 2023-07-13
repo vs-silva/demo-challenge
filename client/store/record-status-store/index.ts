@@ -21,7 +21,6 @@ export function RecordStatusStore() {
 
     const recordStatusCollection = ref<RecordStatusDTO[] | null>(null);
     const recordStatus = ref<RecordStatusDTO | null>(null);
-    const recordStatusEdit = ref<RecordStatusDTO | null>(null);
     const validationErrorMessage = ref<string | null>(null);
 
     async function validateRecordStatus(dto: RequestRecordStatusAddDTO | RequestRecordStatusUpdateDTO): Promise<RequestRecordStatusAddDTO | RequestRecordStatusUpdateDTO | null> {
@@ -111,23 +110,16 @@ export function RecordStatusStore() {
         await getAllRecordStatus();
     }
 
-
-
     function handleValidationError(error: {details: object[], message: string}): void {
         const {message} = error;
         validationErrorMessage.value = message;
         return;
     }
 
-    function enableRecordStatusEdit(dto: RecordStatusDTO): void {
-        recordStatusEdit.value = dto;
-    }
-
     return {
         recordStatusStatesCollection,
         recordStatusCollection,
         recordStatus,
-        recordStatusEdit,
         validationErrorMessage,
         validateRecordStatus,
         addRecordStatus,
@@ -135,6 +127,5 @@ export function RecordStatusStore() {
         updateRecordStatus,
         getAllRecordStatus,
         getRecordStatusById,
-        enableRecordStatusEdit
     };
 }

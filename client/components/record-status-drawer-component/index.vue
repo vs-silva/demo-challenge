@@ -78,14 +78,13 @@
 </template>
 
 <script setup lang="ts">
-
 import {onBeforeMount, ref} from "@vue/runtime-core";
+import EventBus from "../../engines/event-bus";
+import {RecordStatusStoreEventTypesConstants} from "../../store/record-status-store/constants/record-status-store-event-types.constants";
 import {RecordStatusDrawerComponentEventTypeConstants} from "./constants/record-status-drawer-component-event-type.constants";
 import type {RequestRecordStatusAddDTO} from "../../integration/record-status/core/dtos/request-record-status-add.dto";
 import type {RequestRecordStatusUpdateDTO} from "../../integration/record-status/core/dtos/request-record-status-update.dto";
-import EventBus from "../../engines/event-bus";
-import {RecordStatusStoreEventTypesConstants} from "../../store/record-status-store/constants/record-status-store-event-types.constants";
-
+import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/record-status.dto";
 
 const recordStatusId = ref('');
 const recordStatusTitle = ref('');
@@ -121,6 +120,13 @@ function clearFormFields(): void {
 onBeforeMount(() => {
   EventBus.on(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_OR_UPDATE_SUCCESS, () => {
     clearFormFields();
+  });
+
+  EventBus.on(RecordStatusStoreEventTypesConstants.RECORD_STATUS_EDIT, (payload) => {
+    const recordStatusDTO = payload as RecordStatusDTO;
+    recordStatusId.value = recordStatusDTO.id.toString();
+    recordStatusTitle.value = recordStatusDTO.title;
+    recordSelectedStatus.value = recordStatusDTO.status;
   });
 });
 

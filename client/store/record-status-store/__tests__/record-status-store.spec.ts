@@ -368,41 +368,6 @@ describe('RecordStatusStore tests', () => {
 
     });
 
-    describe('enableRecordStatusEdit tests', () => {
 
-        const { recordStatusEdit } = storeToRefs(recordStatusStore);
-        const { enableRecordStatusEdit } = recordStatusStore;
-
-        it('RecordStatusStore should contain a enableRecordStatusEdit method', () => {
-
-            expect(enableRecordStatusEdit).not.toBeNull();
-            expect(enableRecordStatusEdit).toBeDefined();
-            expect(enableRecordStatusEdit).toBeInstanceOf(Function);
-
-        });
-
-
-        it('enableRecordStatusEdit should setup recordStatusEdit with a copy of the RecordStatus that is about to be edited', () => {
-
-            expect(recordStatusEdit.value).toBeNull();
-
-            const fakeRecordStatusDTO: RecordStatusDTO = {
-                id: faker.number.int({min:1}),
-                title: faker.word.sample(4),
-                status: RecordStatusConstants.DRAFT
-            };
-
-            const spy = vi.fn(enableRecordStatusEdit);
-            spy(fakeRecordStatusDTO);
-
-            expect(spy).toHaveBeenCalled();
-            expect(spy).toHaveBeenCalledWith(fakeRecordStatusDTO);
-
-            expect(recordStatusEdit.value).not.toBeNull();
-
-        });
-
-
-    });
 
 });

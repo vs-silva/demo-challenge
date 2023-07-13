@@ -24,16 +24,20 @@
           <td>
             <v-btn variant="text"
                    data-testid="record-status-table-component-body-row-edit-option"
-                   @click.prevent="() => emit(RecordStatusTableComponentEventTypeConstants.EDIT_ROW_CONTENT, recordStatus)"
+                   @click.prevent="() => {
+                     emit(RecordStatusTableComponentEventTypeConstants.EDIT_ROW_CONTENT);
+                     EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_EDIT,recordStatus);
+                   }"
             >
               Edit
             </v-btn> |
-            <v-btn variant="text"
-                   data-testid="record-status-table-component-body-row-delete-option"
-                   @click.prevent="() => emit(RecordStatusTableComponentEventTypeConstants.DELETE_ROW_CONTENT, recordStatus)"
-            >
-              Delete
-            </v-btn>
+            <v-btn
+                variant="text"
+                data-testid="record-status-table-component-body-row-delete-option"
+                @click.prevent="() => {
+                     emit(RecordStatusTableComponentEventTypeConstants.DELETE_ROW_CONTENT)
+                     EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_DELETE,recordStatus);
+                }">Delete</v-btn>
           </td>
 
         </tr>
@@ -46,8 +50,10 @@
 
 <script setup lang="ts">
 import {PropType} from "vue";
-import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/record-status.dto";
+import EventBus from "../../engines/event-bus";
 import { RecordStatusTableComponentEventTypeConstants} from "./constants/record-status-table-component-event-type.constants";
+import {RecordStatusStoreEventTypesConstants} from "../../store/record-status-store/constants/record-status-store-event-types.constants";
+import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/record-status.dto";
 
   const emit = defineEmits([
     RecordStatusTableComponentEventTypeConstants.CREATE_ROW_CONTENT,
