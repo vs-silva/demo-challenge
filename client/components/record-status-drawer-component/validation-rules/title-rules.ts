@@ -8,11 +8,10 @@ export default {
     },
     counter: (value:string): boolean | string => {
 
-        if(value.length < 3)
-        {
+        if(value?.length < 3) {
             return 'Min 3 characters';
         }
 
-        return value.length <= 20 || 'Max 20 characters';
+        return value?.length <= 20 || 'Max 20 characters';
     },
 };

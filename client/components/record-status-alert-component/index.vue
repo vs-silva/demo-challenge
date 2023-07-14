@@ -6,14 +6,14 @@
         class="text-center ma-2"
         v-model="display"
         :color="props.alertType?.type"
-        :timeout="9999"
+        :timeout="1000"
         variant="outlined"
         @update:modelValue="() => {
           display = false;
         }"
     >
-      <h1 class="text-sm-caption">{{alertType?.title}}</h1>
-      <p class="text-sm-caption">{{alertType?.text}}</p>
+      <h1 class="text-sm-caption" data-testid="record-status-alert-component-title">{{alertType?.title}}</h1>
+      <p class="text-sm-caption" data-testid="record-status-alert-component-text">{{alertType?.text}}</p>
     </v-snackbar>
 
   </div>

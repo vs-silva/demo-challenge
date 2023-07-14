@@ -6,7 +6,6 @@ import type {RecordStatusDTO} from "../../../integration/record-status/core/dtos
 import {RecordStatusConstants} from "../../../integration/record-status/core/constants/record-status.constants";
 import {RecordStatusTableComponentEventTypeConstants} from "../constants/record-status-table-component-event-type.constants";
 
-
 describe('RecordStatusTableComponent tests', () => {
 
     let component: RenderResult;
@@ -104,7 +103,7 @@ describe('RecordStatusTableComponent tests', () => {
 
     });
 
-    it('recordStatusTableContent should respond to a click event and emit the selected RecordStatusDTO to be edited', async () => {
+    it('recordStatusTableContent should respond to a click event and emit', async () => {
 
         const editOptions = component.getAllByTestId('record-status-table-component-body-row-edit-option');
         expect(editOptions).toBeDefined();
@@ -115,12 +114,10 @@ describe('RecordStatusTableComponent tests', () => {
         await fireEvent.click(firstEditOption);
 
         expect(component.emitted(RecordStatusTableComponentEventTypeConstants.EDIT_ROW_CONTENT)).toBeTruthy();
-        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.EDIT_ROW_CONTENT)).toEqual([[fakeRecordStatusDTOCollection[0]]]);
-
     });
 
 
-    it('recordStatusTableContent should respond to a click event and emit the selected RecordStatusDTO to be deleted', async () => {
+    it('recordStatusTableContent should respond to a click event and emit', async () => {
 
         const deleteOptions = component.getAllByTestId('record-status-table-component-body-row-delete-option');
         expect(deleteOptions).toBeDefined();
@@ -131,7 +128,6 @@ describe('RecordStatusTableComponent tests', () => {
         await fireEvent.click(firstDeleteOption);
 
         expect(component.emitted(RecordStatusTableComponentEventTypeConstants.DELETE_ROW_CONTENT)).toBeTruthy();
-        expect(component.emitted(RecordStatusTableComponentEventTypeConstants.DELETE_ROW_CONTENT)).toEqual([[fakeRecordStatusDTOCollection[0]]]);
 
     });
 

@@ -6,6 +6,7 @@
           v-model="props.display"
           persistent
           width="auto"
+          data-testid="record-status-dialog-component"
       >
 
         <v-card class="pt-2 pl-2 pr-2">
@@ -34,12 +35,14 @@
                    size="small"
                    class="text-sm-caption d-inline-block"
                    variant="outlined"
+                   data-testid="record-status-dialog-component-delete-option"
                    @click.prevent="() => emit(RecordStatusDialogComponentEventTypeConstants.DELETE_RECORD_STATUS, recordStatusDTO)"
             >Delete</v-btn>
             <v-btn
                 color="blue-grey-lighten-1"
                 size="small"
                 class="text-sm-caption d-inline-block float-right"
+                data-testid="record-status-dialog-component-cancel-option"
                 variant="outlined"
                 @click.prevent="() => {
                   emit(RecordStatusDialogComponentEventTypeConstants.CANCEL_DELETE_RECORD_STATUS);

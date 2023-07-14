@@ -2,7 +2,6 @@ import {afterAll, beforeAll, describe, expect, it} from "vitest";
 import {cleanup, fireEvent, render, RenderResult} from "@testing-library/vue";
 import {faker} from "@faker-js/faker";
 import RecordStatusDrawerComponent from "../index.vue";
-import {RecordStatusDrawerComponentEventTypeConstants} from "../constants/record-status-drawer-component-event-type.constants";
 
 describe('RecordStatusDrawerComponent tests', () => {
 
@@ -47,26 +46,6 @@ describe('RecordStatusDrawerComponent tests', () => {
         await component.rerender({
             recordStatusSelectOptions: fakeSelectOptions
         });
-
-    });
-
-    it.skip('submit-option on click should emit the RecordAddStatusDTO to be created if no Id is present', async () => {
-
-        const titleField = component.getByTestId('record-status-drawer-form-title-field');
-        expect(titleField).toBeDefined();
-        await fireEvent.update(titleField, faker.word.sample(4));
-
-        const statusSelect = component.getByTestId('record-status-drawer-form-status-select-field');
-        expect(statusSelect).toBeDefined();
-        await fireEvent.update(statusSelect, fakeSelectOptions[1]);
-
-        const drawerSubmitOption = component.getByTestId('record-status-drawer-form');
-        await fireEvent.submit(drawerSubmitOption);
-
-        //expect(component.emitted(RecordStatusDrawerComponentEventTypeConstants.CREATE_RECORD_STATUS)).toBeTruthy();
-        //expect(component.emitted(RecordStatusDrawerComponentEventTypeConstants.CREATE_RECORD_STATUS)).toEqual(['1w342']);
-
-        component.debug();
 
     });
 
