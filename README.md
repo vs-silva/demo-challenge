@@ -1,63 +1,25 @@
-# Nuxt 3 Minimal Starter
+#Demo challege app
+A Small applicaton to add, update and remove record status
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-## Setup
+#### Development Approach
+- Test Driven Development
+- Hexagonal Architecture
 
-Make sure to install the dependencies:
+#### Language
+- Typescript
+- Javascript
 
-```bash
-# npm
-npm install
+#### Tools
+- Framework ( Nuxt 3 )
+- UI Framework ( Vuetify 3 )
+- Application State Management ( Pinia )
+- Eventbus ( Mitt )
+- Testing Framework ( Vitest, Testing Library )
+- CI / CD ( Github Actions )
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+#### How to run locally
+- npm install ( to install the required project dependencies )
+- npm run dev ( to run the project locally )
+- npm run test ( to run the tests )
+- npm run test:cov ( to run and get the test coverage )
