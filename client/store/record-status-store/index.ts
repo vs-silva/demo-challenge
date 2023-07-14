@@ -37,6 +37,8 @@ export function RecordStatusStore() {
             validationErrorMessage.value = null;
             return await RequestRecordStatusAddUpdateDtoValidationSchema.validateAsync(dto) as RequestRecordStatusAddDTO | RequestRecordStatusUpdateDTO;
         } catch (error) {
+
+            console.log(error)
             handleValidationError(error as {details: object[], message: string});
             return null;
         }
