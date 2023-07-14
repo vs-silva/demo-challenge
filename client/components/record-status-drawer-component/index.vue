@@ -172,10 +172,12 @@ function handleModelUpdate() {
 onBeforeMount(() => {
   EventBus.on(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_SUCCESS, () => {
     clearFormFields();
+    resetForm();
   });
 
   EventBus.on(RecordStatusStoreEventTypesConstants.RECORD_STATUS_UPDATE_SUCCESS, () => {
     clearFormFields();
+    resetForm();
   });
 
   EventBus.on(RecordStatusStoreEventTypesConstants.RECORD_STATUS_EDIT, (payload) => {
