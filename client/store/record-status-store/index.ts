@@ -8,19 +8,26 @@ import RecordStatus from "../../integration/record-status";
 import {RecordStatusConstants} from "../../integration/record-status/core/constants/record-status.constants";
 import EventBus from "../../engines/event-bus";
 import {RecordStatusStoreEventTypesConstants} from "./constants/record-status-store-event-types.constants";
+import {RecordStatusDataColumnsConstants} from "./constants/record-status-data-columns.constants";
 
 export const RecordStatusStoreIdentifier = 'record-status-store';
 
 export function RecordStatusStore() {
 
-    const recordStatusStatesCollection = ref<String[] | null>([
+    const recordStatusDataColumns = ref<string[] | null> ([
+        RecordStatusDataColumnsConstants.ID,
+        RecordStatusDataColumnsConstants.TITLE,
+        RecordStatusDataColumnsConstants.STATUS,
+        RecordStatusDataColumnsConstants.ACTIONS,
+    ]);
+
+    const recordStatusStatesCollection = ref<string[] | null>([
         RecordStatusConstants.PENDING,
         RecordStatusConstants.PUBLISHED,
         RecordStatusConstants.DRAFT
-        ]);
+    ]);
 
     const recordStatusCollection = ref<RecordStatusDTO[] | null>([]);
-
     const recordStatus = ref<RecordStatusDTO | null>(null);
     const validationErrorMessage = ref<string | null>(null);
 
@@ -49,7 +56,6 @@ export function RecordStatusStore() {
             recordStatus.value = null;
             handleValidationError(error as {details: object[], message: string});
         }
-
     }
 
     async function addRecordStatus(dto: RequestRecordStatusAddDTO): Promise<void> {
@@ -57,18 +63,18 @@ export function RecordStatusStore() {
         const validationResult = await validateRecordStatus(dto);
 
         if(!validationResult) {
-            EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_OR_UPDATE_FAIL);
+            EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_FAIL);
             return;
         }
 
         const recordStatusDTO = await RecordStatus.addRecordStatus(dto);
 
         if(!recordStatusDTO) {
-            EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_OR_UPDATE_FAIL);
+            EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_FAIL);
             return;
         }
 
-        EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_OR_UPDATE_SUCCESS);
+        EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_SUCCESS);
         await getAllRecordStatus();
     }
 
@@ -97,17 +103,18 @@ export function RecordStatusStore() {
         const validationResult = await validateRecordStatus(dto);
 
         if(!validationResult) {
+            EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_UPDATE_FAIL);
             return;
         }
 
         const recordStatusDTO = await RecordStatus.updateRecordStatus(dto);
 
         if(!recordStatusDTO) {
-            EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_OR_UPDATE_FAIL);
+            EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_UPDATE_FAIL);
             return;
         }
 
-        EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_ADD_OR_UPDATE_SUCCESS);
+        EventBus.emit(RecordStatusStoreEventTypesConstants.RECORD_STATUS_UPDATE_SUCCESS);
         await getAllRecordStatus();
     }
 
@@ -118,6 +125,7 @@ export function RecordStatusStore() {
     }
 
     return {
+        recordStatusDataColumns,
         recordStatusStatesCollection,
         recordStatusCollection,
         recordStatus,
