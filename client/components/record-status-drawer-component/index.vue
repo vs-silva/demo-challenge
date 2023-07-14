@@ -10,9 +10,9 @@
           @update:modelValue="handleModelUpdate"
       >
 
-        <v-form data-testid="record-status-drawer-form" @submit.prevent="async (event) => {
+        <v-form ref="form"  data-testid="record-status-drawer-form" @submit.prevent="async (event) => {
 
-          const {valid, errors} = await event;
+          const {valid} = await event;
 
             //@ts-ignore
             if(!valid) {
@@ -39,24 +39,35 @@
               label="Id"
               :readonly="true"
               :disabled="true"
+              single-line
+              density="compact"
+              variant="underlined"
               data-testid="record-status-drawer-form-id-field"
           ></v-text-field>
 
           <v-text-field
               v-model="recordStatusTitle"
               :rules="recordStatusTitleRules"
-              :counter="20"
               label="Title"
-              required
+              variant="underlined"
+              type="input"
+              hint="Please insert a title"
+              single-line
+              density="compact"
+              clearable
               data-testid="record-status-drawer-form-title-field"
+              class="mb-4"
           ></v-text-field>
 
           <v-select
               v-model="recordSelectedStatus"
               :items="props.recordStatusSelectOptions"
               label="Status"
-              required
+              density="compact"
+              :rules="recordStatusOptionRules"
               data-testid="record-status-drawer-form-status-select-field"
+              variant="underlined"
+              class="mb-4"
           ></v-select>
 
           <v-btn
@@ -64,13 +75,18 @@
               color="success"
               inline-block
               data-testid="record-status-drawer-form-submit-option"
+              size="small"
+              variant="outlined"
+              class="text-sm-caption"
           >Submit</v-btn>
 
           <v-btn
               color="error"
               inline-block
               data-testid="record-status-drawer-form-cancel-option"
-              class="float-right"
+              size="small"
+              variant="outlined"
+              class="float-right text-sm-caption"
               @click.prevent="handleCancel"
           >Cancel</v-btn>
 
@@ -89,12 +105,23 @@ import {RecordStatusStoreEventTypesConstants} from "../../store/record-status-st
 import type {RequestRecordStatusAddDTO} from "../../integration/record-status/core/dtos/request-record-status-add.dto";
 import type {RequestRecordStatusUpdateDTO} from "../../integration/record-status/core/dtos/request-record-status-update.dto";
 import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/record-status.dto";
+import TitleRules from './validation-rules/title-rules';
+import StatusRules from './validation-rules/status-rules';
 
+const form = ref();
 const display = ref(false);
 const recordStatusId = ref('');
 const recordStatusTitle = ref('');
 const recordSelectedStatus = ref('');
-const recordStatusTitleRules = ref([]);
+
+const recordStatusTitleRules = ref([
+  TitleRules.required,
+  TitleRules.counter,
+]);
+
+const recordStatusOptionRules = ref([
+  StatusRules.required,
+]);
 
 
 const emit = defineEmits([
@@ -127,7 +154,13 @@ function clearFormFields(): void {
   recordSelectedStatus.value = '';
 }
 
+function resetForm(): void {
+  form.value.reset();
+  form.value.resetValidation();
+}
+
 function handleCancel(): void {
+  resetForm();
   clearFormFields();
   emit(RecordStatusDrawerComponentEventTypeConstants.CANCEL_CREATE_RECORD_STATUS);
 }

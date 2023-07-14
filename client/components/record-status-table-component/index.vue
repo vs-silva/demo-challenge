@@ -17,7 +17,9 @@
 
         <thead data-testid="record-status-table-component-head">
           <tr data-testid="record-status-table-component-head-row">
-            <th v-for="(tableHeader, index) in recordStatusTableHeader" :key="tableHeader.toString()" :class="`text-left ${ recordStatusTableHeader.length -1 !== index ? 'border-e-sm' : '' }`" data-testid="record-status-table-component-head-column">
+            <th v-for="(tableHeader, index) in recordStatusTableHeader" :key="tableHeader.toString()"
+                :class="`text-left ${ recordStatusTableHeader.length -1 !== index ? 'border-e-sm' : '' } text-sm-overline font-weight-bold`"
+                data-testid="record-status-table-component-head-column">
               {{tableHeader}}
             </th>
           </tr>
@@ -31,18 +33,18 @@
               class="text-left"
               data-testid="record-status-table-component-body-row">
 
-            <td class="border-e-sm">{{recordStatus.id}}</td>
-            <td class="border-e-sm">{{recordStatus.title}}</td>
-            <td class="border-e-sm">
-              <v-chip :color="setStatusColor(recordStatus.status)">
-                {{recordStatus.status}}
+            <td class="border-e-sm text-sm-caption">{{recordStatus.id}}</td>
+            <td class="border-e-sm text-sm-caption">{{recordStatus.title}}</td>
+            <td class="border-e-sm ">
+              <v-chip :color="setStatusColor(recordStatus.status)" size="small">
+                <span class="text-sm-caption">{{recordStatus.status}}</span>
               </v-chip>
             </td>
             <td class="pa-0">
 
               <v-btn variant="plain"
                    color="blue"
-                   class="pa-0"
+                   class="pa-0 text-sm-caption"
                    data-testid="record-status-table-component-body-row-edit-option"
                    @click.prevent="() => {
                      emit(RecordStatusTableComponentEventTypeConstants.EDIT_ROW_CONTENT);
@@ -52,6 +54,7 @@
               <v-btn
                 variant="plain"
                 color="blue"
+                class="text-sm-caption"
                 data-testid="record-status-table-component-body-row-delete-option"
                 @click.prevent="() => {
                      emit(RecordStatusTableComponentEventTypeConstants.DELETE_ROW_CONTENT)
@@ -71,9 +74,10 @@
 <script setup lang="ts">
 import {PropType} from "vue";
 import EventBus from "../../engines/event-bus";
-import { RecordStatusTableComponentEventTypeConstants} from "./constants/record-status-table-component-event-type.constants";
+import {RecordStatusTableComponentEventTypeConstants} from "./constants/record-status-table-component-event-type.constants";
 import {RecordStatusStoreEventTypesConstants} from "../../store/record-status-store/constants/record-status-store-event-types.constants";
 import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/record-status.dto";
+import {RecordStatusTableComponentStatusColorConstants} from "./constants/record-status-table-component-status-color.constants";
 
   const emit = defineEmits([
     RecordStatusTableComponentEventTypeConstants.CREATE_ROW_CONTENT,
@@ -93,16 +97,16 @@ import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/re
     }
   });
 
-  function setStatusColor(status: string): string {
+  function setStatusColor(status: string) {
 
     const options =  {
-      pending: 'pink',
-      draft: 'default',
-      published: 'success'
-    } as const;
+      pending: RecordStatusTableComponentStatusColorConstants.PINK,
+      draft: RecordStatusTableComponentStatusColorConstants.GREY,
+      published: RecordStatusTableComponentStatusColorConstants.GREEN
+    };
 
-    //@ts-ignore
-    return options[status] as string; // TODO: check why this is complaining
+    // @ts-ignore
+    return options[status] as string;
   }
 
 </script>
