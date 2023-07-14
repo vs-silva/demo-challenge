@@ -27,7 +27,7 @@ export function RecordStatusStore() {
         RecordStatusConstants.DRAFT
     ]);
 
-    const recordStatusCollection = ref<RecordStatusDTO[] | null>([]);
+    const recordStatusCollection = ref<RecordStatusDTO[] | null>(null);
     const recordStatus = ref<RecordStatusDTO | null>(null);
     const validationErrorMessage = ref<string | null>(null);
 
