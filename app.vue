@@ -12,7 +12,7 @@ import {useHead} from "unhead";
 useHead({
   bodyAttrs: {
     class: 'bg-blue-lighten-5'
-  },
+  }
 });
 
 import MainPage from './client/pages/main-page/index.vue';
