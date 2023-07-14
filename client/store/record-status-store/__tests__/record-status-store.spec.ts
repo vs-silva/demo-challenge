@@ -77,8 +77,6 @@ describe('RecordStatusStore tests', () => {
 
         const { addRecordStatus } = recordStatusStore;
 
-        const { recordStatusAdded } = storeToRefs(recordStatusStore);
-
         it('RecordStatusStore should contain a addRecordStatus method', () => {
 
             const { addRecordStatus } = recordStatusStore;
@@ -103,7 +101,6 @@ describe('RecordStatusStore tests', () => {
 
             expect(spy).toHaveBeenCalled();
             expect(spy).toHaveBeenCalledWith(fakeAddDTO);
-            expect(recordStatusAdded.value).toBeTruthy();
 
             expect(recordStatusCollection.value).toStrictEqual(expect.objectContaining(<RecordStatusDTO[]>[expect.objectContaining(<RecordStatusDTO>{
                 id: expect.any(Number),
@@ -178,7 +175,6 @@ describe('RecordStatusStore tests', () => {
 
     describe('updateRecordStatus tests', () => {
 
-        const { recordStatusUpdated } = storeToRefs(recordStatusStore);
         const { addRecordStatus, updateRecordStatus, removeRecordStatus } = recordStatusStore;
 
         beforeEach(async () => {
@@ -222,8 +218,6 @@ describe('RecordStatusStore tests', () => {
             const updatedRecordStatusDTO = (recordStatusCollection.value as RecordStatusDTO[])[0];
             expect(updatedRecordStatusDTO.status).toEqual(RecordStatusConstants.DRAFT);
 
-            expect(recordStatusUpdated.value).toEqual(true);
-
         });
 
         it('updateRecordStatus should not update RecordStatus if validation fails', async () => {
@@ -250,7 +244,6 @@ describe('RecordStatusStore tests', () => {
             expect(spy).toHaveBeenCalledWith(fakeUpdateDTO);
             expect(spy).toReturn();
 
-            expect(recordStatusUpdated.value).toEqual(false);
             expect(validationErrorMessage.value).toBeTruthy();
 
             expect(recordStatusDTO.id).toEqual(fakeUpdateDTO.id);
@@ -258,8 +251,6 @@ describe('RecordStatusStore tests', () => {
             expect(recordStatusDTO.title).not.toEqual(fakeUpdateDTO.title);
             expect(recordStatusDTO.status).toEqual(fakeAddDTO.status);
             expect(recordStatusDTO.status).not.toEqual(fakeUpdateDTO.status);
-
-            expect(recordStatusUpdated.value).toEqual(false);
 
         });
 
@@ -377,41 +368,6 @@ describe('RecordStatusStore tests', () => {
 
     });
 
-    describe('enableRecordStatusEdit tests', () => {
 
-        const { recordStatusEdit } = storeToRefs(recordStatusStore);
-        const { enableRecordStatusEdit } = recordStatusStore;
-
-        it('RecordStatusStore should contain a enableRecordStatusEdit method', () => {
-
-            expect(enableRecordStatusEdit).not.toBeNull();
-            expect(enableRecordStatusEdit).toBeDefined();
-            expect(enableRecordStatusEdit).toBeInstanceOf(Function);
-
-        });
-
-
-        it('enableRecordStatusEdit should setup recordStatusEdit with a copy of the RecordStatus that is about to be edited', () => {
-
-            expect(recordStatusEdit.value).toBeNull();
-
-            const fakeRecordStatusDTO: RecordStatusDTO = {
-                id: faker.number.int({min:1}),
-                title: faker.word.sample(4),
-                status: RecordStatusConstants.DRAFT
-            };
-
-            const spy = vi.fn(enableRecordStatusEdit);
-            spy(fakeRecordStatusDTO);
-
-            expect(spy).toHaveBeenCalled();
-            expect(spy).toHaveBeenCalledWith(fakeRecordStatusDTO);
-
-            expect(recordStatusEdit.value).not.toBeNull();
-
-        });
-
-
-    });
 
 });

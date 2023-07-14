@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
+    "@invictus.codes/nuxt-vuetify": "^0.3.0",
     "@nuxt/devtools": "latest",
     "@pinia/nuxt": "^0.4.11",
     "@pinia/testing": "^0.1.2",
@@ -33,6 +34,7 @@
   "dependencies": {
     "i18next": "^23.2.8",
     "joi": "^17.9.2",
+    "mitt": "^3.0.1",
     "pinia": "^2.1.4",
     "vue-i18n": "^9.2.2",
     "vuetify": "^3.3.7"

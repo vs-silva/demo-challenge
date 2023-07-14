@@ -40,8 +40,10 @@ export function RecordStatusInMemoryArrayWriterAdapter(): RecordStatusServiceWri
 
         const totalRecordStatuses = engine.length;
 
+        const lastId = engine[engine?.length - 1]?.id;
+
         const entity: RecordStatusEntity = {
-            id: totalRecordStatuses + 1,
+            id: (!totalRecordStatuses) ? (totalRecordStatuses + 1) : (lastId + 1),
             title: dto.title,
             status: dto.status
         }
