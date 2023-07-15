@@ -21,7 +21,7 @@ describe('RecordStatusStore tests', () => {
         const { validateRecordStatus } = recordStatusStore;
 
         const fakeDTO = <RequestRecordStatusAddDTO>{
-            title: faker.word.words(1),
+            title: faker.word.words(2),
             status: RecordStatusConstants.DRAFT
         };
 
