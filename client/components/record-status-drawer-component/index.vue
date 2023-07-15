@@ -110,6 +110,8 @@ import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/re
 import TitleRules from './validation-rules/title-rules';
 import StatusRules from './validation-rules/status-rules';
 import {SubmitEventPromise} from "vuetify";
+import {RecordStatusDrawerComponentComposables} from "./composables/record-status-drawer-component.composables";
+
 
 const form = ref();
 const display = ref(false);
@@ -152,9 +154,9 @@ watch(
 );
 
 function clearFormFields(): void {
-  recordStatusId.value = '';
-  recordStatusTitle.value = '';
-  recordSelectedStatus.value = '';
+  RecordStatusDrawerComponentComposables.useClearRefString(recordStatusId);
+  RecordStatusDrawerComponentComposables.useClearRefString(recordStatusTitle);
+  RecordStatusDrawerComponentComposables.useClearRefString(recordSelectedStatus);
 }
 
 function resetForm(): void {
