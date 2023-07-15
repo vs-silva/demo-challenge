@@ -21,7 +21,7 @@ describe('RecordStatusStore tests', () => {
         const { validateRecordStatus } = recordStatusStore;
 
         const fakeDTO = <RequestRecordStatusAddDTO>{
-            title: faker.word.words(2),
+            title: faker.word.sample(7),
             status: RecordStatusConstants.DRAFT
         };
 
@@ -36,6 +36,8 @@ describe('RecordStatusStore tests', () => {
         });
 
         it('validateRecordStatus should return provided dto if validation has passed successfully', async () => {
+
+            console.log(fakeDTO)
 
             const spy = vi.fn(validateRecordStatus);
             const result = await spy(fakeDTO);
