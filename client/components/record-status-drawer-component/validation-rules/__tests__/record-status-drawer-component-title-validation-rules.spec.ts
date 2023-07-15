@@ -75,7 +75,7 @@ describe('Title validation rules tests', () => {
 
         it('should return true if provided string value has is within the min of 3 and the max of 20 letters', () => {
 
-            const fakeTitle = faker.word.sample(10);
+            const fakeTitle = faker.word.words(2);
 
             const spy = vi.spyOn(TitleRules, 'counter');
             const result = TitleRules.counter(fakeTitle);

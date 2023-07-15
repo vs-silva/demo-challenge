@@ -92,7 +92,7 @@ describe('RecordStatusStore tests', () => {
             expect(recordStatusCollection.value).toBeNull();
 
             const fakeAddDTO = <RequestRecordStatusAddDTO>{
-                title: faker.word.sample(10),
+                title: faker.word.words(1),
                 status: RecordStatusConstants.DRAFT
             };
 
@@ -131,7 +131,7 @@ describe('RecordStatusStore tests', () => {
             const initialCollectionAmount = recordStatusCollection.value?.length as number | 0;
 
             const fakeAddDTO = <RequestRecordStatusAddDTO>{
-                title: faker.word.sample(4),
+                title: faker.word.words(1),
                 status: RecordStatusConstants.PUBLISHED
             };
 
