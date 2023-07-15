@@ -21,7 +21,7 @@ describe('RecordStatusStore tests', () => {
         const { validateRecordStatus } = recordStatusStore;
 
         const fakeDTO = <RequestRecordStatusAddDTO>{
-            title: faker.word.sample(10),
+            title: faker.word.sample(7),
             status: RecordStatusConstants.DRAFT
         };
 
@@ -36,6 +36,8 @@ describe('RecordStatusStore tests', () => {
         });
 
         it('validateRecordStatus should return provided dto if validation has passed successfully', async () => {
+
+            console.log(fakeDTO)
 
             const spy = vi.fn(validateRecordStatus);
             const result = await spy(fakeDTO);
@@ -92,7 +94,7 @@ describe('RecordStatusStore tests', () => {
             expect(recordStatusCollection.value).toBeNull();
 
             const fakeAddDTO = <RequestRecordStatusAddDTO>{
-                title: faker.word.sample(10),
+                title: faker.word.words(1),
                 status: RecordStatusConstants.DRAFT
             };
 
@@ -131,7 +133,7 @@ describe('RecordStatusStore tests', () => {
             const initialCollectionAmount = recordStatusCollection.value?.length as number | 0;
 
             const fakeAddDTO = <RequestRecordStatusAddDTO>{
-                title: faker.word.sample(4),
+                title: faker.word.words(1),
                 status: RecordStatusConstants.PUBLISHED
             };
 
