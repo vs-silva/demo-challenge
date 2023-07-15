@@ -6,7 +6,7 @@
         class="text-center ma-2"
         v-model="display"
         :color="props.alertType?.type"
-        :timeout="1000"
+        :timeout="3000"
         variant="outlined"
         @update:modelValue="() => {
           display = false;

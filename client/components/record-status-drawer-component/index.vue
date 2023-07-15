@@ -10,7 +10,9 @@
           @update:modelValue="handleModelUpdate"
       >
 
-        <v-form ref="form"  data-testid="record-status-drawer-form" @submit.prevent="async (event) => {
+        <v-form ref="form"
+                data-testid="record-status-drawer-form"
+                @submit.prevent="async (event: SubmitEventPromise) => {
 
           const {valid} = await event;
 
@@ -107,6 +109,7 @@ import type {RequestRecordStatusUpdateDTO} from "../../integration/record-status
 import type {RecordStatusDTO} from "../../integration/record-status/core/dtos/record-status.dto";
 import TitleRules from './validation-rules/title-rules';
 import StatusRules from './validation-rules/status-rules';
+import {SubmitEventPromise} from "vuetify";
 
 const form = ref();
 const display = ref(false);
